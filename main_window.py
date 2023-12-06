@@ -9,9 +9,36 @@ from PyQt5.QtGui import QPixmap
 import week
 import year
 import script
-import Iterator
-import next
 import split_date_data
+
+class Window2(QWidget):
+    def __init__(self, date: datetime.date) -> None:
+        super().__init__()
+
+        self.setGeometry(500, 500, 500, 500)
+        self.background_2 = QLabel(self)
+        self.fire = QLabel(self)
+        self.setWindowTitle('Выбор файла')
+
+        self.base = QtWidgets.QLabel(self)
+        self.base.setFont(QtGui.QFont("Times", 11, QtGui.QFont.Light))
+        self.base.setText("Найти данные в файле по дате")
+        self.base.move(100, 10)
+        self.base.setStyleSheet("background-color: white; border: 1px solid black;")
+        self.base.adjustSize()        
+
+        self.b2_4 = QPushButton('dataset', self)
+        self.b2_4.resize(300, 160)
+        self.b2_4.move(105, 180)
+        self.b2_4.clicked.connect(lambda: self.findbydataset(date))
+
+    def findbydataset(self, date: datetime.date) -> None:
+        tmp = script.find_1("dataset.csv",date)
+        if tmp == None:            
+            QMessageBox.about(self, "Информация по дате", f"Дата: {date} \nДанные : Не найдены")
+        else:
+            QMessageBox.about(self, "Информация по дате", f"Дата: {date} \nДанные : {tmp[1]}")
+
 
 class Window(QMainWindow):
 
@@ -20,7 +47,7 @@ class Window(QMainWindow):
         self.initUI()
 
     def initUI(self) -> None:
-        path_to_csv = os.path.join("E:/", "AP3")
+        
         super(Window, self).__init__()
         self.setFixedSize(600, 500)
         self.setWindowTitle("Value by Dates")
@@ -35,9 +62,7 @@ class Window(QMainWindow):
 
         self.folderpath_dataset = ""
         while self.folderpath_dataset == "":
-            self.folderpath_dataset = QtWidgets.QFileDialog.getExistingDirectory(
-                self, "Please select folder of dataset"
-            )
+            self.folderpath_dataset = QtWidgets.QFileDialog.getOpenFileName(self, 'Select File')[0]
 
         self.b1 = QtWidgets.QPushButton(self)
         self.b1.setText("Разделение на года")
@@ -64,7 +89,7 @@ class Window(QMainWindow):
         self.b4.clicked.connect(self.input_data)
     
     def sort_data_date(self) -> None:
-        split_date_data.file_cut_date_and_data("dataset.csv")
+        split_date_data.file_cut_date_and_data(self.folderpath_dataset)
         QMessageBox.about(self, "Sort", "Sorting by date")
         
     def sort_week(self) -> None:
@@ -77,29 +102,28 @@ class Window(QMainWindow):
         
         
     def check_date(self, text: str) -> bool:
-        Flag = False
-        check, check_value = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"], ["0", "1", "3", "4", "6", "7", "8", "9"]
-        if  len(text) != 10: return False
-        for i in range(len(check_value)):
-           for j in range(len(check)):
-                if text[int(check_value[i])] == check[j]: Flag = True
-           if Flag == False: return False
-        if (0 <= int(text[0:2]) <= 31 and 0 <= int(text[3:5]) <= 12 and 2008 <= int(text[6:10]) <= 2023): return True
+        Flag = False        
+        if (0 <= int(text[8:10]) <= 31 and 0 <= int(text[5:7]) <= 12 and 2008 <= int(text[0:4]) <= 2023): return True
         else: return False
 
     def input_data(self) -> None:
         """a function that accepts a date and checks it for correctness"""
-        text, ok = QInputDialog.getText(self, 'Data', 'Enter the data in the format dd.mm.yyyy:')
+        text, ok = QInputDialog.getText(self, 'Data', 'Enter the data in the format yyyy-mm-dd:')
         dictionary = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
         if ok:
             if self.check_date(text) == True:
-                        if  int(text[0:2])<=dictionary[int(text[3:5])-1]:
-                            date = datetime.date(int(text[6:10]), int(text[3:5]), int(text[0:2]))
+                        if  int(text[8:10])<=dictionary[int(text[5:7])]:
+                            u=text[0:4]
+                            m=text[5:7]
+                            d=text[8:10]
+                            date = datetime.date(int(text[0:4]), int(text[5:7]), int(text[8:10]))
                             self.show_window_2(date)
                         else:  QMessageBox.about(self, "warning!\n", "Неправильные данные...")
             else:  QMessageBox.about(self, "warning!\n", "Неправильный формат входных данных...")
 
-    
+    def show_window_2(self, date: datetime.date) -> None:
+        self.w2 = Window2(date)
+        self.w2.show()
 
 
 def application() -> None:

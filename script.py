@@ -13,13 +13,15 @@ def find_1(path: str, date: datetime) -> list[str] | None:
     Returns:
         list[str] | None: _description_
     """
-    with open(path, "r", encoding="utf-8", newline="") as file:
-        reader = csv.reader(file)
-        for row in reader:
-            d=datetime.strptime(row[0],"%Y-%m-%d")
-            if d == date:
-                return row
-        return None
+    try:
+        with open(path, "r", encoding="utf-8", newline="") as file:
+            reader = csv.reader(file)
+            for row in reader:
+                d=datetime.strptime(row[0],"%Y-%m-%d")
+                if d.date() == date:
+                    return row
+    except:
+        return "date is ont found"
 
 
 def find_2(path1: str, path2: str, date: datetime) -> list[str] | None:
