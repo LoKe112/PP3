@@ -93,18 +93,19 @@ class Window(QMainWindow):
         QMessageBox.about(self, "Sort", "Sorting by date")
         
     def sort_week(self) -> None:
-        week.N_cut_by_week("dataset.csv")
+        week.N_cut_by_week(self.folderpath_dataset)
         QMessageBox.about(self, "Sort", "Sorting by week")
 
     def sort_year(self) -> None:
-        year.N_cut_by_year("dataset.csv")
+        year.N_cut_by_year(self.folderpath_dataset)
         QMessageBox.about(self, "Sort", "Sorting by year")
-        
-        
+               
     def check_date(self, text: str) -> bool:
-        Flag = False        
-        if (0 <= int(text[8:10]) <= 31 and 0 <= int(text[5:7]) <= 12 and 2008 <= int(text[0:4]) <= 2023): return True
-        else: return False
+        if  len(text) != 10: return False
+        if (0 <= int(text[8:10]) <= 31 and 0 <= int(text[5:7]) <= 12 and 2008 <= int(text[0:4]) <= 2023):
+            return True
+        else: 
+            return False
 
     def input_data(self) -> None:
         """a function that accepts a date and checks it for correctness"""
