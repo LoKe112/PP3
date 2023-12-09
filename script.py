@@ -21,7 +21,7 @@ def find_1(path: str, date: datetime) -> list[str] | None:
                 if d.date() == date:
                     return row
     except:
-        return "date is ont found"
+        return "date is not found"
 
 
 def find_2(path1: str, path2: str, date: datetime) -> list[str] | None:
@@ -76,7 +76,7 @@ def find_3(path: str, date: datetime) -> list[str] | None:
     for file in os.listdir(path):
         d1, d2 = map(lambda x: datetime.strptime(x,"%Y%m%d"), file.split(".")[0].split("_"))
         if (d1 <= date <= d2):
-            with open(path + file, "r", encoding="utf-8", newline="") as fileData:
+            with open(os.path.join(path,  file), "r", encoding="utf-8", newline="") as fileData:
                 reader = csv.reader(fileData)
                 for row in reader:
                     d=datetime.strptime(row[0],"%Y-%m-%d")
@@ -95,12 +95,13 @@ def find_4(path: str, date: datetime) -> list[str] | None:
     Returns:
         list[str] | None: _description_
     """
+    
     week = date.isocalendar().week
     for file in os.listdir(path):
         s = file.split(".")[0].split("-")
         y, w = int(s[0]), int(s[1])
         if (date.year == int(y) and week == w):
-            with open(path + file, "r", encoding="utf-8", newline="") as fileData:
+            with open(os.path.join(path,  file), "r", encoding="utf-8", newline="") as fileData:
                 reader = csv.reader(fileData)
                 for row in reader:
                     d=datetime.strptime(row[0], "%Y-%m-%d")
@@ -111,10 +112,10 @@ def find_4(path: str, date: datetime) -> list[str] | None:
 
 def main() -> None:
     dt = datetime.strptime(input(), "%Y-%m-%d")
-    print(find_1("dataset.csv", dt))
+    #print(find_1("dataset.csv", dt))
     print(find_2("1\\X.csv", "1\\Y.csv", dt))
-    print(find_3("2\\", dt))
-    print(find_4("3\\", dt))
+    #print(find_3("2\\", dt))
+    #print(find_4("3\\", dt))
 
 
 if __name__ == '__main__':

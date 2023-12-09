@@ -1,151 +1,353 @@
 import sys
 import datetime
 import os
-
-from PyQt5 import QtWidgets, QtGui
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QMessageBox, QWidget, QPushButton, QInputDialog
-from PyQt5.QtGui import QPixmap
+import csv
+import string
 
 import week
 import year
 import script
 import split_date_data
+import Iterator
+
+from os import path
+from datetime import *
+
+from PyQt5 import QtWidgets, QtGui
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QMessageBox, QWidget, QPushButton, QInputDialog
+from PyQt5.QtGui import QPixmap
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Window2(QWidget):
-    def __init__(self, date: datetime.date) -> None:
-        super().__init__()
+class Ui_MainWindow(object):
+    def setupUi(self, MainWindow):
+        MainWindow.setObjectName("Window")
+        MainWindow.setFixedSize(461, 255)
+        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.centralwidget.setObjectName("centralwidget")
 
-        self.setGeometry(500, 500, 500, 500)
-        self.background_2 = QLabel(self)
-        self.fire = QLabel(self)
-        self.setWindowTitle('Выбор файла')
+        self.main_file = QtWidgets.QPushButton(self.centralwidget)
+        self.main_file.setGeometry(QtCore.QRect(10, 10, 121, 51))
+        self.main_file.setObjectName("pushButton")
+        self.main_file.setStyleSheet("""
+        QPushButton {
+            background-color: rgb(219, 219, 219); 
+            color: black;
+            border-radius: 5%;
+        }
+        QPushButton:hover {
+            background-color:gray;
+            color:white;
+            border: 1px solid black;
+        }
+    """)
 
-        self.base = QtWidgets.QLabel(self)
-        self.base.setFont(QtGui.QFont("Times", 11, QtGui.QFont.Light))
-        self.base.setText("Найти данные в файле по дате")
-        self.base.move(100, 10)
-        self.base.setStyleSheet(
-            "background-color: white; border: 1px solid black;")
-        self.base.adjustSize()
+        self.cut_datae = QtWidgets.QPushButton(self.centralwidget)
+        self.cut_datae.setGeometry(QtCore.QRect(170, 10, 121, 51))
+        self.cut_datae.setObjectName("pushButton_2")
+        self.cut_datae.setStyleSheet("""
+        QPushButton {
+            background-color: rgb(219, 219, 219); 
+            color: black;
+            border-radius: 5%;
+        }
+        QPushButton:hover {
+            background-color:gray;
+            color:white;
+            border: 1px solid black;
+        }
+    """)
 
-        self.b2_4 = QPushButton('dataset', self)
-        self.b2_4.resize(300, 160)
-        self.b2_4.move(105, 180)
-        self.b2_4.clicked.connect(lambda: self.findbydataset(date))
+        self.folder_for_datae = QtWidgets.QPushButton(self.centralwidget)
+        self.folder_for_datae.setGeometry(QtCore.QRect(230, 71, 60, 20))
+        self.folder_for_datae.setObjectName("select_pushButton_2")
+        self.folder_for_datae.setStyleSheet("""
+        QPushButton {
+            background-color: rgb(219, 219, 219); 
+            color: black;
+            border-radius: 5%;
+        }
+        QPushButton:hover {
+            background-color:gray;
+            color:white;
+            border: 1px solid black;
+        }
+    """)
 
-    def findbydataset(self, date: datetime.date) -> None:
-        tmp = script.find_1("dataset.csv", date)
-        if tmp == None:
-            QMessageBox.about(self, "Информация по дате",
-                              f"Дата: {date} \nДанные : Не найдены")
-        else:
-            QMessageBox.about(self, "Информация по дате",
-                              f"Дата: {date} \nДанные : {tmp[1]}")
+        self.cut_years = QtWidgets.QPushButton(self.centralwidget)
+        self.cut_years.setGeometry(QtCore.QRect(330, 10, 121, 51))
+        self.cut_years.setObjectName("pushButton_3")
+        self.cut_years.setStyleSheet("""
+        QPushButton {
+            background-color: rgb(219, 219, 219); 
+            color: black;
+            border-radius: 5%;
+        }
+        QPushButton:hover {
+            background-color:gray;
+            color:white;
+            border: 1px solid black;
+        }
+    """)
 
+        self.folder_for_years = QtWidgets.QPushButton(self.centralwidget)
+        self.folder_for_years.setGeometry(QtCore.QRect(390, 71, 60, 20))
+        self.folder_for_years.setObjectName("select_pushButton_3")
+        self.folder_for_years.setStyleSheet("""
+        QPushButton {
+            background-color: rgb(219, 219, 219); 
+            color: black;
+            border-radius: 5%;
+        }
+        QPushButton:hover {
+            background-color:gray;
+            color:white;
+            border: 1px solid black;
+        }
+    """)
 
+        self.cut_weaks = QtWidgets.QPushButton(self.centralwidget)
+        self.cut_weaks.setGeometry(QtCore.QRect(330, 100, 121, 51))
+        self.cut_weaks.setObjectName("pushButton_4")
+        self.cut_weaks.setStyleSheet("""
+        QPushButton {
+            background-color: rgb(219, 219, 219); 
+            color: black;
+            border-radius: 5%;
+        }
+        QPushButton:hover {
+            background-color:gray;
+            color:white;
+            border: 1px solid black;
+        }
+    """)
+
+        self.folder_for_weaks = QtWidgets.QPushButton(self.centralwidget)
+        self.folder_for_weaks.setGeometry(QtCore.QRect(390, 160, 60, 20))
+        self.folder_for_weaks.setObjectName("select_pushButton_4")
+        self.folder_for_weaks.setStyleSheet("""
+        QPushButton {
+            background-color: rgb(219, 219, 219); 
+            color: black;
+            border-radius: 5%;
+        }
+        QPushButton:hover {
+            background-color:gray;
+            color:white;
+            border: 1px solid black;
+        }
+    """)
+
+        self.textEdit = QtWidgets.QLineEdit(self.centralwidget)
+        self.textEdit.setGeometry(QtCore.QRect(10, 100, 121, 51))
+        self.textEdit.setObjectName("textEdit")
+
+        self.find_years = QtWidgets.QPushButton(self.centralwidget)
+        self.find_years.setGeometry(QtCore.QRect(50, 180, 81, 21))
+        self.find_years.setObjectName("pushButton_5")
+        self.find_years.setStyleSheet("""
+        QPushButton {
+            background-color: rgb(219, 219, 219); 
+            color: black;
+            border-radius: 5%;
+        }
+        QPushButton:hover {
+            background-color:gray;
+            color:white;
+            border: 1px solid black;
+        }
+    """)
+        self.find_weaks = QtWidgets.QPushButton(self.centralwidget)
+        self.find_weaks.setGeometry(QtCore.QRect(50, 205, 81, 21))
+        self.find_weaks.setObjectName("pushButton_5")
+        self.find_weaks.setStyleSheet("""
+        QPushButton {
+            background-color: rgb(219, 219, 219); 
+            color: black;
+            border-radius: 5%;
+        }
+        QPushButton:hover {
+            background-color:gray;
+            color:white;
+            border: 1px solid black;
+        }
+    """)
+        self.find_datae = QtWidgets.QPushButton(self.centralwidget)
+        self.find_datae.setGeometry(QtCore.QRect(50, 155, 81, 21))
+        self.find_datae.setObjectName("pushButton_5")
+        self.find_datae.setStyleSheet("""
+        QPushButton {
+            background-color: rgb(219, 219, 219); 
+            color: black;
+            border-radius: 5%;
+        }
+        QPushButton:hover {
+            background-color:gray;
+            color:white;
+            border: 1px solid black;
+        }
+    """)
+
+        self.label = QtWidgets.QLabel(self.centralwidget)
+        self.label.setGeometry(QtCore.QRect(133, 90, 190, 100))
+        self.label.setObjectName("label")
+        self.label.setWordWrap(True)        
+
+        MainWindow.setCentralWidget(self.centralwidget)
+        self.menubar = QtWidgets.QMenuBar(MainWindow)
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 461, 21))
+        self.menubar.setObjectName("menubar")
+
+        MainWindow.setMenuBar(self.menubar)
+        self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        self.statusbar.setObjectName("statusbar")
+        MainWindow.setStatusBar(self.statusbar)
+
+        self.retranslateUi(MainWindow)
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+    def retranslateUi(self, MainWindow):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.main_file.setText(_translate("MainWindow", "Select main file"))
+
+        self.folder_for_datae.setText(
+            _translate("MainWindow", "add folder"))
+        self.cut_datae.setText(_translate("MainWindow", "Split by data/date"))
+
+        self.folder_for_years.setText(
+            _translate("MainWindow", "add folder"))
+        self.cut_years.setText(_translate("MainWindow", "Split by years"))
+
+        self.cut_weaks.setText(_translate("MainWindow", "Split by weaks"))
+        self.folder_for_weaks.setText(
+            _translate("MainWindow", "add folder"))
+
+        self.find_years.setText(_translate("MainWindow", "find in years"))
+        self.find_weaks.setText(_translate("MainWindow", "find in weeks"))
+        self.find_datae.setText(_translate("MainWindow", "find in data/e"))
+        self.label.setText(_translate("MainWindow", ""))
+
+                        
 class Window(QMainWindow):
-
-    def __init__(self) -> None:
-        super().__init__()
-        self.initUI()
-
-    def initUI(self) -> None:
-
+    def __init__(self):
+        main_path = ""
+        datae_path = ""
+        years_path = ""
+        weaks_path = ""
+        iter = ""
         super(Window, self).__init__()
-        self.setFixedSize(600, 500)
-        self.setWindowTitle("Value by Dates")
-        self.background = QLabel(self)
-        self.fire = QLabel(self)
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)
+        self.ui.main_file.clicked.connect(self.select_main_filepath)
+        self.ui.folder_for_datae.clicked.connect(
+            self.select_folder_for_datae)
+        self.ui.folder_for_years.clicked.connect(
+            self.select_folder_for_years)
+        self.ui.folder_for_weaks.clicked.connect(
+            self.select_folder_for_weaks)
+        self.ui.find_years.clicked.connect(self.get_data_years)
+        self.ui.find_weaks.clicked.connect(self.get_data_weaks)
+        self.ui.find_datae.clicked.connect(self.get_data_datae)
+        self.ui.cut_datae.clicked.connect(self.cut_by_datae)
+        self.ui.cut_years.clicked.connect(self.cut_by_years)
+        self.ui.cut_weaks.clicked.connect(self.cut_by_weaks)
+        
 
-        self.base = QtWidgets.QLabel(self)
-        self.base.setFont(QtGui.QFont("Times", 14, QtGui.QFont.Bold))
-        self.base.setText("Создание и выбор аннотаций")
-        self.base.move(130, 10)
-        self.base.adjustSize()
-
-        self.folderpath_dataset = ""
-        while self.folderpath_dataset == "":
-            self.folderpath_dataset = QtWidgets.QFileDialog.getOpenFileName(
-                self, 'Select File')[0]
-
-        self.b1 = QtWidgets.QPushButton(self)
-        self.b1.setText("Разделение на года")
-        self.b1.setFixedSize(200, 50)
-        self.b1.move(200, 100)
-        self.b1.clicked.connect(self.sort_year)
-
-        self.b2 = QtWidgets.QPushButton(self)
-        self.b2.setText("Разделение на недели")
-        self.b2.setFixedSize(200, 50)
-        self.b2.move(200, 150)
-        self.b2.clicked.connect(self.sort_week)
-
-        self.b3 = QtWidgets.QPushButton(self)
-        self.b3.setText("Разделение на даты и данные")
-        self.b3.setFixedSize(200, 50)
-        self.b3.move(200, 200)
-        self.b3.clicked.connect(self.sort_data_date)
-
-        self.b4 = QtWidgets.QPushButton(self)
-        self.b4.setText("Ввести дату")
-        self.b4.setFixedSize(200, 50)
-        self.b4.move(200, 300)
-        self.b4.clicked.connect(self.input_data)
-
-    def sort_data_date(self) -> None:
-        split_date_data.file_cut_date_and_data(self.folderpath_dataset)
-        QMessageBox.about(self, "Sort", "Sorting by date")
-
-    def sort_week(self) -> None:
-        week.N_cut_by_week(self.folderpath_dataset)
-        QMessageBox.about(self, "Sort", "Sorting by week")
-
-    def sort_year(self) -> None:
-        year.N_cut_by_year(self.folderpath_dataset)
-        QMessageBox.about(self, "Sort", "Sorting by year")
-
-    def check_date(self, text: str) -> bool:
-        if len(text) != 10:
-            return False
-        if (0 <= int(text[8:10]) <= 31 and 0 <= int(text[5:7]) <= 12 and 2008 <= int(text[0:4]) <= 2023):
-            return True
+    def select_main_filepath(self) -> None:
+        """select path for original dataset
+        """
+        filepath = QtWidgets.QFileDialog.getOpenFileName(self, 'Select File')[0]
+        if ".csv" == path.splitext(filepath)[1]:
+            self.main_path = filepath
+            self.iter = Iterator.Iterator(filepath)
+            self.ui.label.setText("")
+            QMessageBox.about(self, "Selection", "dataset selected")
         else:
-            return False
+            self.ui.label.setText("Chosen file needs to be .csv")
+    def select_folder_for_datae(self) -> None:
+        """select filepath for data/date cut
+        """
+        folderpath = QtWidgets.QFileDialog.getExistingDirectory(
+            self, 'Select Folder')
+        self.datae_path = folderpath
+        QMessageBox.about(self, "Selection", "Folder selected")
 
-    def input_data(self) -> None:
-        """a function that accepts a date and checks it for correctness"""
-        text, ok = QInputDialog.getText(
-            self, 'Data', 'Enter the data in the format yyyy-mm-dd:')
-        dictionary = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-        if ok:
-            if self.check_date(text) == True:
-                if int(text[8:10]) <= dictionary[int(text[5:7])]:
-                    u = text[0:4]
-                    m = text[5:7]
-                    d = text[8:10]
-                    date = datetime.date(int(text[0:4]), int(
-                        text[5:7]), int(text[8:10]))
-                    self.show_window_2(date)
-                else:
-                    QMessageBox.about(self, "warning!\n",
-                                      "Неправильные данные...")
-            else:
-                QMessageBox.about(self, "warning!\n",
-                                  "Неправильный формат входных данных...")
+    def select_folder_for_years(self) -> None:
+        """select filepath for years cut
+        """
+        folderpath = QtWidgets.QFileDialog.getExistingDirectory(
+            self, 'Select Folder')
+        self.years_path = folderpath
+        QMessageBox.about(self, "Selection", "Folder selected")
 
-    def show_window_2(self, date: datetime.date) -> None:
-        self.w2 = Window2(date)
-        self.w2.show()
+    def select_folder_for_weaks(self) -> None:
+        """select filepath for weaks cut
+        """
+        folderpath = QtWidgets.QFileDialog.getExistingDirectory(
+            self, 'Select Folder')
+        self.weaks_path = folderpath
+        QMessageBox.about(self, "Selection", "Folder selected")
 
+    def get_data_years(self) -> None:
+        """find date from Line Edit in dataset with years
+        """
+        try:
+            cur_data = datetime.strptime(self.ui.textEdit.text(),"%Y-%m-%d")
+            data = str(script.find_3(self.years_path, cur_data))
+            self.ui.label.setText(data)
+        except:
+            self.ui.label.setText("no file path")
 
-def application() -> None:
-    app = QApplication(sys.argv)
-    w = Window()
-    w.show()
-    sys.exit(app.exec_())
+    def get_data_weaks(self) -> None:
+        """find date from Line Edit in dataset with weaks
+        """
+        try:
+            cur_data = datetime.strptime(self.ui.textEdit.text(),"%Y-%m-%d")
+            
+            data = str(script.find_4(self.weaks_path, cur_data))
+            self.ui.label.setText(data)
+        except:
+            self.ui.label.setText("no file path")
 
+    def get_data_datae(self) -> None:
+        """find date from Line Edit in dataset with data/date
+        """
+        try:
+            print(self.datae_path)
+            cur_data = datetime.strptime(self.ui.textEdit.text(),"%Y-%m-%d")
+            
+            data = str(script.find_2(os.path.join(self.datae_path,
+                    "X.csv"), os.path.join(self.datae_path, "Y.csv"), cur_data))
+            self.ui.label.setText(data)
+        except:
+            self.ui.label.setText("no file path")
+
+    def cut_by_datae(self) -> None:
+        """cut original dataset on data/date
+        """
+        try:
+            split_date_data.file_cut_date_and_data(self.main_path, self.datae_path)
+        except:
+            self.ui.label.setText("no file path")
+
+    def cut_by_years(self) -> None:
+        """cut original dataset on years
+        """
+        try:
+            year.N_cut_by_year(self.main_path, self.years_path)
+        except:
+            self.ui.label.setText("no file path")
+    def cut_by_weaks(self) -> None:
+        """cut original dataset on weaks
+        """
+        try:
+            week.N_cut_by_week(self.main_path, self.weaks_path)
+        except:
+            self.ui.label.setText("no file path")    
 
 if __name__ == "__main__":
-
-    application()
+    app = QApplication(sys.argv)
+    window =Window()
+    window.show()
+    sys.exit(app.exec())
