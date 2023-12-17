@@ -36,7 +36,7 @@ class Ui_MainWindow(object):
             border-radius: 5%;
         }
         QPushButton:hover {
-            background-color:gray;
+            background-color:blue;
             color:white;
             border: 1px solid black;
         }
@@ -52,7 +52,7 @@ class Ui_MainWindow(object):
             border-radius: 5%;
         }
         QPushButton:hover {
-            background-color:gray;
+            background-color:blue;
             color:white;
             border: 1px solid black;
         }
@@ -68,7 +68,7 @@ class Ui_MainWindow(object):
             border-radius: 5%;
         }
         QPushButton:hover {
-            background-color:gray;
+            background-color:blue;
             color:white;
             border: 1px solid black;
         }
@@ -84,7 +84,7 @@ class Ui_MainWindow(object):
             border-radius: 5%;
         }
         QPushButton:hover {
-            background-color:gray;
+            background-color:blue;
             color:white;
             border: 1px solid black;
         }
@@ -100,7 +100,7 @@ class Ui_MainWindow(object):
             border-radius: 5%;
         }
         QPushButton:hover {
-            background-color:gray;
+            background-color:blue;
             color:white;
             border: 1px solid black;
         }
@@ -116,7 +116,7 @@ class Ui_MainWindow(object):
             border-radius: 5%;
         }
         QPushButton:hover {
-            background-color:gray;
+            background-color:blue;
             color:white;
             border: 1px solid black;
         }
@@ -132,7 +132,7 @@ class Ui_MainWindow(object):
             border-radius: 5%;
         }
         QPushButton:hover {
-            background-color:gray;
+            background-color:blue;
             color:white;
             border: 1px solid black;
         }
@@ -152,7 +152,7 @@ class Ui_MainWindow(object):
             border-radius: 5%;
         }
         QPushButton:hover {
-            background-color:gray;
+            background-color:blue;
             color:white;
             border: 1px solid black;
         }
@@ -167,7 +167,7 @@ class Ui_MainWindow(object):
             border-radius: 5%;
         }
         QPushButton:hover {
-            background-color:gray;
+            background-color:blue;
             color:white;
             border: 1px solid black;
         }
@@ -182,7 +182,7 @@ class Ui_MainWindow(object):
             border-radius: 5%;
         }
         QPushButton:hover {
-            background-color:gray;
+            background-color:blue;
             color:white;
             border: 1px solid black;
         }
@@ -231,11 +231,6 @@ class Ui_MainWindow(object):
                         
 class Window(QMainWindow):
     def __init__(self):
-        main_path = ""
-        datae_path = ""
-        years_path = ""
-        weaks_path = ""
-        iter = ""
         super(Window, self).__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
