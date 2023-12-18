@@ -159,7 +159,7 @@ class Ui_MainWindow(object):
     """)
         self.find_weaks = QtWidgets.QPushButton(self.centralwidget)
         self.find_weaks.setGeometry(QtCore.QRect(50, 205, 81, 21))
-        self.find_weaks.setObjectName("pushButton_5")
+        self.find_weaks.setObjectName("pushButton_6")
         self.find_weaks.setStyleSheet("""
         QPushButton {
             background-color: rgb(219, 219, 219); 
@@ -174,7 +174,7 @@ class Ui_MainWindow(object):
     """)
         self.find_datae = QtWidgets.QPushButton(self.centralwidget)
         self.find_datae.setGeometry(QtCore.QRect(50, 155, 81, 21))
-        self.find_datae.setObjectName("pushButton_5")
+        self.find_datae.setObjectName("pushButton_7")
         self.find_datae.setStyleSheet("""
         QPushButton {
             background-color: rgb(219, 219, 219); 
@@ -191,7 +191,7 @@ class Ui_MainWindow(object):
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(133, 90, 190, 100))
         self.label.setObjectName("label")
-        self.label.setWordWrap(True)        
+        self.label.setWordWrap(True)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
@@ -228,7 +228,7 @@ class Ui_MainWindow(object):
         self.find_datae.setText(_translate("MainWindow", "find in data/e"))
         self.label.setText(_translate("MainWindow", ""))
 
-                        
+
 class Window(QMainWindow):
     def __init__(self):
         super(Window, self).__init__()
@@ -247,12 +247,12 @@ class Window(QMainWindow):
         self.ui.cut_datae.clicked.connect(self.cut_by_datae)
         self.ui.cut_years.clicked.connect(self.cut_by_years)
         self.ui.cut_weaks.clicked.connect(self.cut_by_weaks)
-        
 
     def select_main_filepath(self) -> None:
         """select path for original dataset
         """
-        filepath = QtWidgets.QFileDialog.getOpenFileName(self, 'Select File')[0]
+        filepath = QtWidgets.QFileDialog.getOpenFileName(self, 'Select File')[
+            0]
         if ".csv" == path.splitext(filepath)[1]:
             self.main_path = filepath
             self.iter = Iterator.Iterator(filepath)
@@ -260,6 +260,7 @@ class Window(QMainWindow):
             QMessageBox.about(self, "Selection", "dataset selected")
         else:
             self.ui.label.setText("Chosen file needs to be .csv")
+
     def select_folder_for_datae(self) -> None:
         """select filepath for data/date cut
         """
@@ -285,35 +286,35 @@ class Window(QMainWindow):
         QMessageBox.about(self, "Selection", "Folder selected")
 
     def get_data_years(self) -> None:
-        """find date from Line Edit in dataset with years
+        """find date in dataset with years
         """
         try:
-            cur_data = datetime.strptime(self.ui.textEdit.text(),"%Y-%m-%d")
+            cur_data = datetime.strptime(self.ui.textEdit.text(), "%Y-%m-%d")
             data = str(script.find_3(self.years_path, cur_data))
             self.ui.label.setText(data)
         except:
             self.ui.label.setText("no file path")
 
     def get_data_weaks(self) -> None:
-        """find date from Line Edit in dataset with weaks
+        """find date in dataset with weaks
         """
         try:
-            cur_data = datetime.strptime(self.ui.textEdit.text(),"%Y-%m-%d")
-            
+            cur_data = datetime.strptime(self.ui.textEdit.text(), "%Y-%m-%d")
+
             data = str(script.find_4(self.weaks_path, cur_data))
             self.ui.label.setText(data)
         except:
             self.ui.label.setText("no file path")
 
     def get_data_datae(self) -> None:
-        """find date from Line Edit in dataset with data/date
+        """find date in dataset with data/date
         """
         try:
             print(self.datae_path)
-            cur_data = datetime.strptime(self.ui.textEdit.text(),"%Y-%m-%d")
-            
+            cur_data = datetime.strptime(self.ui.textEdit.text(), "%Y-%m-%d")
+
             data = str(script.find_2(os.path.join(self.datae_path,
-                    "X.csv"), os.path.join(self.datae_path, "Y.csv"), cur_data))
+                                                  "X.csv"), os.path.join(self.datae_path, "Y.csv"), cur_data))
             self.ui.label.setText(data)
         except:
             self.ui.label.setText("no file path")
@@ -322,7 +323,8 @@ class Window(QMainWindow):
         """cut original dataset on data/date
         """
         try:
-            split_date_data.file_cut_date_and_data(self.main_path, self.datae_path)
+            split_date_data.file_cut_date_and_data(
+                self.main_path, self.datae_path)
         except:
             self.ui.label.setText("no file path")
 
@@ -333,16 +335,18 @@ class Window(QMainWindow):
             year.N_cut_by_year(self.main_path, self.years_path)
         except:
             self.ui.label.setText("no file path")
+
     def cut_by_weaks(self) -> None:
         """cut original dataset on weaks
         """
         try:
             week.N_cut_by_week(self.main_path, self.weaks_path)
         except:
-            self.ui.label.setText("no file path")    
+            self.ui.label.setText("no file path")
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    window =Window()
+    window = Window()
     window.show()
     sys.exit(app.exec())
